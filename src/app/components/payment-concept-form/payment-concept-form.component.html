@@ -1,0 +1,73 @@
+<div class="form-container">
+  <div class="form-header">
+    <h1>{{ pageTitle }}</h1>
+    <p>Complete the form to {{ isEditMode ? 'update' : 'create' }} a payment concept</p>
+  </div>
+  
+  <mat-card class="form-card">
+    <mat-card-content>
+      <form [formGroup]="conceptForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Concept Name</mat-label>
+            <input matInput formControlName="name" placeholder="E.g. Transport, Mom's Payment">
+            <mat-error *ngIf="conceptForm.get('name')?.hasError('required')">
+              The name is required
+            </mat-error>
+            <mat-error *ngIf="conceptForm.get('name')?.hasError('minlength')">
+              The name must be at least 3 characters long
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div class="form-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Description (optional)</mat-label>
+            <textarea matInput formControlName="description" placeholder="Description or additional details" rows="3"></textarea>
+          </mat-form-field>
+        </div>
+        
+        <div class="form-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Daily Amount (COP)</mat-label>
+            <input matInput type="number" formControlName="dailyAmount" min="0">
+            <span matPrefix>$&nbsp;</span>
+            <mat-error *ngIf="conceptForm.get('dailyAmount')?.hasError('required')">
+              The daily amount is required
+            </mat-error>
+            <mat-error *ngIf="conceptForm.get('dailyAmount')?.hasError('min')">
+              The amount must be greater than or equal to 0
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div class="form-group">
+          <h3>Select the days of the week that this concept applies to</h3>
+          <div class="days-selection" formGroupName="selectedDays">
+            <div class="day-checkbox" *ngFor="let day of daysOfWeek">
+              <mat-checkbox [formControlName]="day.key" color="primary">
+                {{ day.label }}
+              </mat-checkbox>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group checkbox-group">
+          <mat-checkbox formControlName="active" color="primary">
+            Active
+          </mat-checkbox>
+          <small>Inactive concepts will not be calculated in the periods</small>
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" mat-stroked-button (click)="onCancel()">
+            Cancel
+          </button>
+          <button type="submit" mat-raised-button color="primary" [disabled]="conceptForm.invalid">
+            {{ submitButtonText }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

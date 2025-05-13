@@ -1,0 +1,154 @@
+<div class="detail-container">
+  <div class="detail-header">
+    <button mat-icon-button (click)="goBack()" matTooltip="Go Back">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Concept Details</h1>
+  </div>
+  
+  <div *ngIf="loading" class="loading-spinner">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading information...</p>
+  </div>
+  
+  <div *ngIf="error" class="error-message">
+    <mat-icon>error</mat-icon>
+    <p>Could not load the concept information.</p>
+    <button mat-raised-button color="primary" (click)="goBack()">Go Back</button>
+  </div>
+  
+  <div *ngIf="!loading && !error && paymentConcept" class="concept-details">
+    <mat-card class="concept-card">
+      <mat-card-header>
+        <mat-card-title>{{ paymentConcept.name }}</mat-card-title>
+        <mat-card-subtitle>
+          <span [ngClass]="paymentConcept.active ? 'active-badge' : 'inactive-badge'">
+            {{ paymentConcept.active ? 'Active' : 'Inactive' }}
+          </span>
+        </mat-card-subtitle>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <div class="concept-info">
+          <div class="info-item">
+            <div class="info-label">Description:</div>
+            <div class="info-value">{{ paymentConcept.description || 'No description' }}</div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-label">Daily Amount:</div>
+            <div class="info-value amount-value">COP ${{ paymentConcept.dailyAmount | number:'1.2-2' }}</div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-label">Frequency:</div>
+            <div class="info-value">{{ getFrequencyTypeLabel(paymentConcept.selectedDays) }}</div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-label">Selected Days:</div>
+            <div class="info-value">{{ getSelectedDaysLabel(paymentConcept.selectedDays) }}</div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-label">Creation Date:</div>
+            <div class="info-value">{{ formatDate(paymentConcept.createdAt) }}</div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-label">Last Updated:</div>
+            <div class="info-value">{{ formatDate(paymentConcept.updatedAt) }}</div>
+          </div>
+        </div>
+        
+        <div class="card-actions">
+          <button mat-raised-button color="primary" (click)="editConcept()">
+            <mat-icon>edit</mat-icon> Edit Concept
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    
+    <div class="periods-section">
+      <h2>Payment Calculations</h2>
+      
+      <div class="periods-grid">
+        <!-- Current Period Card -->
+        <mat-card class="period-card active-period" *ngIf="currentPeriod">
+          <mat-card-header>
+            <mat-card-title>Current Period</mat-card-title>
+            <mat-card-subtitle>
+              {{ formatShortDate(currentPeriod.startDate) }} - {{ formatShortDate(currentPeriod.endDate) }}
+            </mat-card-subtitle>
+          </mat-card-header>
+          
+          <mat-card-content>
+            <div class="period-summary">
+              <div class="summary-row">
+                <div class="summary-label">Applicable Days:</div>
+                <div class="summary-value">{{ currentPeriodDaysCount }} days</div>
+              </div>
+              
+              <div class="summary-row">
+                <div class="summary-label">Daily Amount:</div>
+                <div class="summary-value">${{ paymentConcept.dailyAmount | number:'1.2-2' }}</div>
+              </div>
+              
+              <div class="summary-row total-row">
+                <div class="summary-label">Total to Pay:</div>
+                <div class="summary-value">${{ currentPeriodAmount | number:'1.2-2' }}</div>
+              </div>
+            </div>
+            
+            <mat-divider></mat-divider>
+            
+            <div class="days-list">
+              <h4>Breakdown of Days ({{ currentPeriodDaysCount }})</h4>
+              
+              <div class="days-container">
+                <div *ngFor="let day of calculatedDays" class="day-item">
+                  <span class="day-date">{{ formatShortDate(day.date) }}</span>
+                  <span class="day-name">{{ getDayName(day.date) }}</span>
+                  <span class="day-amount">${{ paymentConcept.dailyAmount | number:'1.2-2' }}</span>
+                </div>
+                
+                <div *ngIf="calculatedDays.length === 0" class="no-days">
+                  No applicable days in this period according to the selected frequency.
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+        
+        <!-- Next Period Card -->
+        <mat-card class="period-card future-period" *ngIf="nextPeriod">
+          <mat-card-header>
+            <mat-card-title>Next Period</mat-card-title>
+            <mat-card-subtitle>
+              {{ formatShortDate(nextPeriod.startDate) }} - {{ formatShortDate(nextPeriod.endDate) }}
+            </mat-card-subtitle>
+          </mat-card-header>
+          
+          <mat-card-content>
+            <div class="period-summary">
+              <div class="summary-row">
+                <div class="summary-label">Applicable Days:</div>
+                <div class="summary-value">{{ nextPeriodDaysCount }} days</div>
+              </div>
+              
+              <div class="summary-row">
+                <div class="summary-label">Daily Amount:</div>
+                <div class="summary-value">${{ paymentConcept.dailyAmount | number:'1.2-2' }}</div>
+              </div>
+              
+              <div class="summary-row total-row">
+                <div class="summary-label">Estimated Total:</div>
+                <div class="summary-value">${{ nextPeriodAmount | number:'1.2-2' }}</div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

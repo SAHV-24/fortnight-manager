@@ -1,0 +1,25 @@
+<mat-toolbar color="primary" class="header">
+  <div class="container header-container">
+    <div class="logo-title" (click)="navigateTo('/dashboard')">
+      <mat-icon>payment</mat-icon>
+      <span>Fortnightly Payment Manager</span>
+    </div>
+    
+    <div class="menu-items">
+      <button mat-button (click)="navigateTo('/dashboard')">
+        <mat-icon>dashboard</mat-icon>
+        <span>Dashboard</span>
+      </button>
+      
+      <button mat-button (click)="navigateTo('/payment-concepts')">
+        <mat-icon>list</mat-icon>
+        <span>Concepts</span>
+      </button>
+      
+      <button mat-raised-button color="accent" (click)="navigateTo('/payment-concept/new')">
+        <mat-icon>add</mat-icon>
+        <span>New Concept</span>
+      </button>
+    </div>
+  </div>
+</mat-toolbar>

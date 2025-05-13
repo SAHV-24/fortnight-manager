@@ -1,0 +1,109 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>Fortnightly Payment Manager</h1>
+    <p>Manage your payments for the 5th and 20th of each month</p>
+  </div>
+  
+  <div class="dashboard-summary">
+    <mat-card class="summary-card">
+      <mat-card-header>
+        <mat-card-title>Period Information</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="summary-icon">
+          <mat-icon>event</mat-icon>
+        </div>
+        <div class="summary-info">
+          <h3>Current Period</h3>
+          <p *ngIf="currentPeriod">
+            {{ formatDate(currentPeriod.startDate) }} - {{ formatDate(currentPeriod.endDate) }}
+          </p>
+          <p *ngIf="!currentPeriod">No active period</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="summary-card">
+      <mat-card-header>
+        <mat-card-title>Concept Statistics</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="summary-icon">
+          <mat-icon>list</mat-icon>
+        </div>
+        <div class="summary-info">
+          <h3>Registered Concepts</h3>
+          <p>{{ totalConceptsCount }} total concepts</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="summary-card" *ngIf="currentPeriod">
+      <mat-card-header>
+        <mat-card-title>Financial Summary</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="summary-icon">
+          <mat-icon>payments</mat-icon>
+        </div>
+        <div class="summary-info">
+          <h3>Period Total</h3>
+          <p class="total-amount">COP ${{ calculatePeriodTotal(currentPeriod) | number:'1.2-2' }}</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  
+  <div class="action-buttons">
+    <button mat-raised-button color="primary" (click)="navigateToNewConcept()">
+      <mat-icon>add</mat-icon> New Concept
+    </button>
+    <button mat-raised-button color="accent" (click)="navigateToConceptsList()">
+      <mat-icon>list</mat-icon> View All Concepts
+    </button>
+  </div>
+  
+  <div class="periods-section">
+    <h2>Payment Periods</h2>
+    
+    <div class="periods-grid">
+      <ng-container *ngFor="let period of paymentPeriods$ | async">
+        <mat-card [ngClass]="['period-card', getPeriodStatusClass(period)]">
+          <mat-card-header>
+            <mat-card-title>
+              Fortnight: {{ formatShortDate(period.startDate) }} - {{ formatShortDate(period.endDate) }}
+            </mat-card-title>
+            <mat-card-subtitle>
+              <span *ngIf="isPeriodActive(period)" class="active-badge">Current Period</span>
+            </mat-card-subtitle>
+          </mat-card-header>
+          
+          <mat-card-content>
+            <div class="period-total">
+              <h4>Total: COP ${{ calculatePeriodTotal(period) | number:'1.2-2' }}</h4>
+            </div>
+            
+            <mat-divider></mat-divider>
+            
+            <div class="period-payments">
+              <h4>Concepts ({{ period.payments.length }})</h4>
+              
+              <div *ngIf="period.payments.length === 0" class="no-payments">
+                No concepts for this period
+              </div>
+              
+              <mat-list *ngIf="period.payments.length > 0">
+                <mat-list-item *ngFor="let payment of period.payments" class="payment-item">
+                  <div class="payment-detail" (click)="navigateToConceptDetail(payment.concept.id)">
+                    <span class="payment-name">{{ payment.concept.name }}</span>
+                    <span class="payment-amount">COP ${{ payment.totalAmount | number:'1.2-2' }}</span>
+                  </div>
+                </mat-list-item>
+              </mat-list>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,97 @@
+.form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 30px;
+  
+  h1 {
+    font-size: 24px;
+    font-weight: 500;
+    color: #3f51b5;
+    margin-bottom: 10px;
+  }
+  
+  p {
+    color: #666;
+    margin: 0;
+  }
+}
+
+.form-card {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  width: 100%;
+  
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  
+  small {
+    color: #666;
+    margin-top: 5px;
+    font-size: 12px;
+  }
+}
+
+.days-selection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 10px 0 20px;
+  
+  .day-checkbox {
+    flex-basis: calc(33.33% - 8px);
+    
+    @media (max-width: 768px) {
+      flex-basis: calc(50% - 6px);
+    }
+    
+    @media (max-width: 480px) {
+      flex-basis: 100%;
+    }
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+  
+  button {
+    min-width: 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-container {
+    padding: 15px;
+  }
+  
+  .form-actions {
+    flex-direction: column-reverse;
+    
+    button {
+      width: 100%;
+    }
+  }
+}
