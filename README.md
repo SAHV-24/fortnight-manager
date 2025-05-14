@@ -2,6 +2,12 @@
 
 Fortnightly Payment Manager is an Angular application designed to help users manage and calculate recurring payments on a fortnightly basis. The application allows users to define payment concepts, calculate costs based on selected days, and manage payment periods. It is currently a static application using **LocalStorage** for data persistence but is structured to integrate with an API in the future for full CRUD functionality.
 
+## Demo
+
+Here you can check a Demo Deployed on Netlify:
+
+https://calculador-quincenas.netlify.app/dashboard
+
 ## Features
 
 - **Payment Concept Management**: Create, edit, and delete payment concepts such as "Transport" or "Mom's Payment."
