@@ -6,7 +6,7 @@ Fortnightly Payment Manager is an Angular application designed to help users man
 
 Here you can check a Demo Deployed on Netlify:
 
-https://calculador-quincenas.netlify.app/dashboard
+https://calculador-quincenas.netlify.app/
 
 ## Features
 
